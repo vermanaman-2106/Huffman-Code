@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Compression Using Huffman Coding</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Data Compression Using Huffman Coding</h1>
+    <p class="subtitle">Design and Analysis of Algorithms (DAA) Project</p>
+  </header>
+
+  <main>
+    <!-- Input -->
+    <section>
+      <h2>1. Enter Text</h2>
+      <p>Type any text below. The program will count character frequencies, build a Huffman tree, and compress the text using prefix codes.</p>
+      <label for="inputText">Input text</label>
+      <textarea id="inputText" rows="6" placeholder="Enter text to compress..."></textarea>
+      <div class="button-row">
+        <button type="button" id="compressBtn">Compress Text</button>
+        <button type="button" id="sampleBtn">Load Sample Text</button>
+        <button type="button" id="clearBtn">Clear</button>
+      </div>
+      <p id="errorMessage" class="error" hidden></p>
+    </section>
+
+    <div id="results" hidden>
+      <!-- Frequency table -->
+      <section>
+        <h2>2. Character Frequency Table</h2>
+        <p>Each distinct character and how many times it appears in the input.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Frequency</th>
+              </tr>
+            </thead>
+            <tbody id="freqTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Huffman tree -->
+      <section>
+        <h2>3. Huffman Tree</h2>
+        <p>
+          Leaf nodes show a character and its frequency. Internal nodes show the combined frequency.
+          Left edges are labelled <strong>0</strong> and right edges are labelled <strong>1</strong>.
+        </p>
+        <div class="tree-wrap" id="treeWrap">
+          <svg id="huffmanTree" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </section>
+
+      <!-- Codes -->
+      <section>
+        <h2>4. Huffman Codes</h2>
+        <p>Codes are obtained by walking from the root to each leaf (0 = left, 1 = right).</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Frequency</th>
+                <th>Huffman Code</th>
+              </tr>
+            </thead>
+            <tbody id="codeTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Encode -->
+      <section>
+        <h2>5. Encoded Text</h2>
+        <p>Each character of the original text is replaced by its Huffman code.</p>
+        <h3>Original text</h3>
+        <p id="originalText" class="output-box"></p>
+        <h3>Encoded binary string</h3>
+        <p id="encodedText" class="output-box mono"></p>
+        <button type="button" id="copyBtn">Copy Encoded Text</button>
+        <p id="copyMessage" class="note" hidden></p>
+      </section>
+
+      <!-- Decode -->
+      <section>
+        <h2>6. Decoded Text</h2>
+        <p>The encoded bits are walked through the Huffman tree. Reaching a leaf outputs one character, then decoding continues from the root.</p>
+        <h3>Encoded binary string</h3>
+        <p id="decodeEncodedText" class="output-box mono"></p>
+        <h3>Decoded text</h3>
+        <p id="decodedText" class="output-box"></p>
+        <p id="verifyMessage"></p>
+      </section>
+
+      <!-- Statistics -->
+      <section>
+        <h2>7. Compression Statistics</h2>
+        <p class="note">
+          These are <strong>theoretical payload statistics</strong> only.
+          Original size assumes 8 bits per input character. Encoded size is the length of the Huffman bit string.
+          This is <em>not</em> a complete compressed file format, and the cost of storing the Huffman tree is not included.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr>
+                <th>Original size (bits)</th>
+                <td id="originalBits"></td>
+              </tr>
+              <tr>
+                <th>Encoded size (bits)</th>
+                <td id="encodedBits"></td>
+              </tr>
+              <tr>
+                <th>Compression ratio (original / encoded)</th>
+                <td id="compressionRatio"></td>
+              </tr>
+              <tr>
+                <th>Space saved (%)</th>
+                <td id="spaceSaved"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Algorithm notes -->
+    <section>
+      <h2>8. Algorithm and Time Complexity</h2>
+      <p>
+        Huffman Coding repeatedly combines the two nodes with the smallest frequencies to construct an optimal prefix code.
+        This is a greedy strategy: at each step the two currently cheapest nodes are merged, and the resulting prefix codes are optimal for the given frequencies.
+      </p>
+      <ul>
+        <li><strong>Frequency counting:</strong> O(n)</li>
+        <li><strong>Huffman tree construction using a min-heap:</strong> O(k log k)</li>
+        <li><strong>Encoding:</strong> O(n), excluding output-size costs</li>
+        <li><strong>Decoding:</strong> O(encoded bit length)</li>
+      </ul>
+      <p>
+        Here, <strong>n</strong> is the length of the input text (number of characters) and
+        <strong>k</strong> is the number of distinct characters in that text.
+        Building the tree does O(k) heap insertions of leaves, then O(k) merge steps.
+        Each heap operation costs O(log k), so tree construction is O(k log k).
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>DAA Mini Project — Huffman Coding (HTML, CSS, JavaScript)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
